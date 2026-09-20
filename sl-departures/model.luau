@@ -366,13 +366,24 @@ function M.parseDepartures(data)
   return true, departures, stopDeviations, ""
 end
 
+-- SL attaches a deviation to every cancellation whose message is just the
+-- word for it ("Inställd"). The row already shows the cancellation, so that
+-- entry adds nothing; a cancellation that carries a reason is kept.
+local function isBareCancellation(dev, message)
+  if string.upper(tostring(dev.consequence or "")) ~= "CANCELLED" then
+    return false
+  end
+  local lower = string.lower(message)
+  return lower == "inställd" or lower == "cancelled" or lower == "inställt"
+end
+
 function M.deviationText(deviations)
   local messages = {}
   local seen = {}
   for _, dev in ipairs(deviations or {}) do
     if type(dev) == "table" then
       local message = M.plain(dev.message)
-      if message ~= "" and not seen[message] then
+      if message ~= "" and not seen[message] and not isBareCancellation(dev, message) then
         seen[message] = true
         table.insert(messages, message)
       end
