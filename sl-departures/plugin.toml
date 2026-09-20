@@ -1,0 +1,131 @@
+id          = "henrrrik/sl-departures"
+name        = "SL Departures"
+version     = "0.1.0"
+plugin_api  = 22
+author      = "henrrrik"
+license     = "MIT"
+icon        = "bus"
+description = "Live departure times for a Stockholm (SL) bus stop, metro, tram, train, or ferry berth."
+tags        = ["transit", "stockholm", "info", "bar", "panel"]
+
+# The bar widget: next departures from one SL site. Left click opens the
+# board panel, right click refreshes, middle click opens its settings.
+[[widget]]
+id    = "departures"
+entry = "widget.luau"
+
+  [[widget.setting]]
+  key             = "site_id"
+  type            = "int"
+  label_key       = "settings.site_id.label"
+  description_key = "settings.site_id.description"
+  default         = 0
+  min             = 0
+  max             = 999999
+
+  [[widget.setting]]
+  key             = "transport"
+  type            = "select"
+  label_key       = "settings.transport.label"
+  description_key = "settings.transport.description"
+  default         = "ALL"
+  options = [
+    { value = "ALL",   label_key = "settings.transport.all" },
+    { value = "BUS",   label_key = "settings.transport.bus" },
+    { value = "METRO", label_key = "settings.transport.metro" },
+    { value = "TRAM",  label_key = "settings.transport.tram" },
+    { value = "TRAIN", label_key = "settings.transport.train" },
+    { value = "SHIP",  label_key = "settings.transport.ship" },
+    { value = "FERRY", label_key = "settings.transport.ferry" },
+  ]
+
+  [[widget.setting]]
+  key             = "direction"
+  type            = "int"
+  label_key       = "settings.direction.label"
+  description_key = "settings.direction.description"
+  default         = 0
+  min             = 0
+  max             = 2
+
+  [[widget.setting]]
+  key             = "lines"
+  type            = "string"
+  label_key       = "settings.lines.label"
+  description_key = "settings.lines.description"
+  default         = ""
+
+  [[widget.setting]]
+  key             = "walk_minutes"
+  type            = "int"
+  label_key       = "settings.walk_minutes.label"
+  description_key = "settings.walk_minutes.description"
+  default         = 0
+  min             = 0
+  max             = 120
+
+  [[widget.setting]]
+  key             = "bar_count"
+  type            = "int"
+  label_key       = "settings.bar_count.label"
+  description_key = "settings.bar_count.description"
+  default         = 2
+  min             = 1
+  max             = 6
+
+  [[widget.setting]]
+  key             = "forecast_minutes"
+  type            = "int"
+  label_key       = "settings.forecast_minutes.label"
+  description_key = "settings.forecast_minutes.description"
+  default         = 90
+  min             = 10
+  max             = 360
+  advanced        = true
+
+  [[widget.setting]]
+  key             = "refresh_seconds"
+  type            = "int"
+  label_key       = "settings.refresh_seconds.label"
+  description_key = "settings.refresh_seconds.description"
+  default         = 30
+  min             = 15
+  max             = 600
+  advanced        = true
+
+  [[widget.setting]]
+  key             = "bar_format"
+  type            = "string"
+  label_key       = "settings.bar_format.label"
+  description_key = "settings.bar_format.description"
+  default         = "{line} {wait}"
+  advanced        = true
+
+  [[widget.setting]]
+  key             = "show_icon"
+  type            = "bool"
+  label_key       = "settings.show_icon.label"
+  description_key = "settings.show_icon.description"
+  default         = true
+
+# The board panel: the full list, service messages, and the stop picker.
+# Opened by the widget; also reachable over IPC:
+#   noctalia msg panel-toggle henrrrik/sl-departures:board
+[[panel]]
+id              = "board"
+entry           = "panel.luau"
+width           = 440
+height          = 560
+placement       = "attached"
+position        = "auto"
+open_near_click = true
+keyboard_focus  = "exclusive"
+
+  [[panel.setting]]
+  key             = "panel_count"
+  type            = "int"
+  label_key       = "settings.panel_count.label"
+  description_key = "settings.panel_count.description"
+  default         = 12
+  min             = 1
+  max             = 40

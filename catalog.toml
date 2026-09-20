@@ -1,0 +1,15 @@
+# Index of the plugins in this source repo, so Noctalia can list and
+# compat-check them without a full clone. Keep in step with
+# sl-departures/plugin.toml.
+
+[[plugin]]
+id          = "henrrrik/sl-departures"
+name        = "SL Departures"
+version     = "0.1.0"
+author      = "henrrrik"
+license     = "MIT"
+icon        = "bus"
+description = "Live departure times for a Stockholm (SL) bus stop, metro, tram, train, or ferry berth."
+deprecated  = false
+plugin_api  = 22
+tags        = ["transit", "stockholm", "info", "bar", "panel"]
